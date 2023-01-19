@@ -28,8 +28,8 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Ecom-service-dockercompose" options="-parameters" />
-      <module name="api-gateway" options="-parameters" />
-      <module name="discovery-service" options="-parameters" />
+      <module name="api-gateway" options="" />
+      <module name="discovery-service" options="" />
       <module name="inventory-service" options="-parameters" />
       <module name="order-service" options="-parameters" />
       <module name="product-service" options="-parameters" />
