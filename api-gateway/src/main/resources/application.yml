@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://192.168.0.150:8181/realms/microservices-realm
+  cloud:
+    compatibility-verifier:
+      enabled: false
+    gateway:
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/api/product/getAllProducts,/api/product/createProduct
+        - id: order-service
+          uri: http://order-service:8081
+          predicates:
+            - Path=/api/order/placeOrder
+        - id: inventory-service
+          uri: http://inventory-service:8082
+          predicates:
+            - Path=/api/inventory
+        - id: discovery-service
+          uri: http://discovery-service:8761
+          predicates:
+            - Path=/eureka/web
+          filters:
+            - SetPath=/
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER}
+    eureka-server-port: 8761
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+server:
+  port: 2343
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    root: info
+    org.springframework.cloud.gateway.route.RouteDefinitionLocator: info
+    org.springframework.cloud.gateway: trace
+management:
+  health:
+    db:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
